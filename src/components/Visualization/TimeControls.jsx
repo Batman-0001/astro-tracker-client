@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Clock,
 } from "lucide-react";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 const SPEED_OPTIONS = [
   { label: "0.5×", value: 0.5 },
@@ -32,6 +33,7 @@ const TimeControls = ({
 }) => {
   const trackRef = useRef(null);
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   // Clamp timeOffset to bounds
   const clampedOffset = Math.max(-maxHours, Math.min(maxHours, timeOffset));
@@ -83,7 +85,7 @@ const TimeControls = ({
       transition={{ delay: 0.3 }}
       className="w-full px-4 pb-3"
     >
-      <div className="glass p-3 max-w-2xl mx-auto">
+      <div className={`glass ${isMobile ? "p-2" : "p-3"} max-w-2xl mx-auto`}>
         {/* Header row */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2 text-white/50 text-xs">

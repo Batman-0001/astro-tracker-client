@@ -138,9 +138,9 @@ const AsteroidDetail = () => {
   const sizeComparison = getSizeComparison(asteroid.estimatedDiameterMax);
 
   return (
-    <div className="min-h-screen pt-20 pb-10">
+    <div className="min-h-screen pt-24 pb-12">
       {/* Hero Section */}
-      <section className="relative px-6 py-12 overflow-hidden">
+      <section className="relative px-4 sm:px-6 py-12 overflow-hidden">
         <div className="max-w-6xl mx-auto">
           {/* Background glow based on risk */}
           <div
@@ -148,7 +148,7 @@ const AsteroidDetail = () => {
               asteroid.riskCategory === "high" ? "bg-risk-high/20"
               : asteroid.riskCategory === "moderate" ? "bg-risk-moderate/20"
               : "bg-accent-primary/20"
-            }`}
+            } hidden md:block`}
           />
 
           {/* Back button */}
@@ -187,11 +187,11 @@ const AsteroidDetail = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3 w-full md:w-auto">
               {isAuthenticated && (
                 <motion.button
                   onClick={handleWatchToggle}
-                  className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                  className={`px-4 py-2 rounded-lg flex items-center gap-2 justify-center transition-all w-full sm:w-auto ${
                     isWatched ?
                       "bg-accent-primary text-space-900"
                     : "btn-secondary"
@@ -226,7 +226,7 @@ const AsteroidDetail = () => {
                     navigator.clipboard.writeText(url);
                   }
                 }}
-                className="btn-secondary flex items-center gap-2"
+                className="btn-secondary flex items-center justify-center gap-2 w-full sm:w-auto"
               >
                 <Share2 className="w-5 h-5" />
                 Share
@@ -238,7 +238,7 @@ const AsteroidDetail = () => {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary flex items-center gap-2"
+                className="btn-secondary flex items-center justify-center gap-2 w-full sm:w-auto"
               >
                 <ExternalLink className="w-5 h-5" />
                 NASA JPL
@@ -249,9 +249,9 @@ const AsteroidDetail = () => {
       </section>
 
       {/* Stats Grid */}
-      <section className="px-6 py-8">
+      <section className="px-4 sm:px-6 py-8">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             <motion.div
               className="glass p-6"
               initial={{ opacity: 0, y: 20 }}
@@ -323,17 +323,17 @@ const AsteroidDetail = () => {
 
       {/* Size Comparison Section */}
       {sizeComparison && (
-        <section className="px-6 py-8">
+        <section className="px-4 sm:px-6 py-8">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl font-bold text-white mb-6">
               Size Comparison
             </h2>
             <motion.div
-              className="glass p-8"
+              className="glass p-6 sm:p-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <div className="flex items-center justify-center gap-12">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-8 text-center">
                 <div className="text-center">
                   <div className="text-6xl mb-3">{sizeComparison.icon}</div>
                   <p className="text-white/70">{sizeComparison.name}</p>
@@ -350,22 +350,22 @@ const AsteroidDetail = () => {
 
               {/* Visual bar comparison */}
               <div className="mt-8 space-y-4">
-                <div className="flex items-center gap-4">
-                  <span className="w-32 text-right text-white/50">
+                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                  <span className="w-full md:w-32 md:text-right text-white/50">
                     {sizeComparison.name}
                   </span>
-                  <div className="flex-1 bg-space-700 rounded-full h-4">
+                  <div className="w-full bg-space-700 rounded-full h-4">
                     <div
                       className="bg-white/30 h-full rounded-full"
                       style={{ width: "30%" }}
                     />
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <span className="w-32 text-right text-white/50">
+                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                  <span className="w-full md:w-32 md:text-right text-white/50">
                     Asteroid
                   </span>
-                  <div className="flex-1 bg-space-700 rounded-full h-4">
+                  <div className="w-full bg-space-700 rounded-full h-4">
                     <motion.div
                       className="bg-gradient-to-r from-accent-primary to-accent-secondary h-full rounded-full"
                       initial={{ width: 0 }}
@@ -383,10 +383,10 @@ const AsteroidDetail = () => {
       )}
 
       {/* Risk Analysis */}
-      <section className="px-6 py-8">
+      <section className="px-4 sm:px-6 py-8">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-white mb-6">Risk Analysis</h2>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <motion.div
               className="glass p-6"
               initial={{ opacity: 0, x: -20 }}
@@ -535,7 +535,7 @@ const AsteroidDetail = () => {
       </section>
 
       {/* Additional Info */}
-      <section className="px-6 py-8">
+      <section className="px-4 sm:px-6 py-8">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-white mb-6">
             Orbital Information
@@ -545,7 +545,7 @@ const AsteroidDetail = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
                 <p className="text-white/50 text-sm">Orbiting Body</p>
                 <p className="text-lg font-semibold text-white flex items-center gap-2">
@@ -571,7 +571,7 @@ const AsteroidDetail = () => {
       </section>
 
       {/* Asteroid Discussion */}
-      <section className="px-6 py-8">
+      <section className="px-4 sm:px-6 py-8">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-white mb-6">
             Community Discussion

@@ -115,17 +115,17 @@ const Settings = () => {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-6">
+    <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8"
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8"
         >
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-              <SettingsIcon className="w-8 h-8 text-accent-primary" />
+            <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2 flex items-center gap-3">
+              <SettingsIcon className="w-6 h-6 sm:w-8 sm:h-8 text-accent-primary" />
               Settings
             </h1>
             <p className="text-white/50">Customize your Astral experience</p>
@@ -321,8 +321,8 @@ const Settings = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-risk-high/10 rounded-xl">
-              <div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-risk-high/10 rounded-xl">
+              <div className="min-w-0">
                 <p className="font-medium text-white">Delete Account</p>
                 <p className="text-sm text-white/50">
                   Permanently delete your account and all data

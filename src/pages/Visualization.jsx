@@ -22,6 +22,7 @@ import Earth3D from "../components/Visualization/Earth3D";
 import TimeControls from "../components/Visualization/TimeControls";
 import AsteroidInfoPanel from "../components/Visualization/AsteroidInfoPanel";
 import SunClock from "../components/Visualization/SunClock";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 const Visualization = () => {
   const navigate = useNavigate();
@@ -52,6 +53,8 @@ const Visualization = () => {
   const [playSpeed, setPlaySpeed] = useState(1);
   const animFrameRef = useRef(null);
   const lastTickRef = useRef(Date.now());
+  const isCompact = useMediaQuery("(max-width: 1024px)");
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   // ─── Load data ───────────────────────────────────────────────────
   useEffect(() => {
@@ -135,6 +138,11 @@ const Visualization = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedAsteroid, handleDeselectAsteroid]);
 
+  // Auto-close info panel on compact screens — user can toggle it back
+  useEffect(() => {
+    if (isCompact) setShowInfo(false);
+  }, [isCompact]);
+
   const handleNavigateToDetail = useCallback(
     (id) => {
       navigate(`/asteroids/${id}`);
@@ -149,13 +157,23 @@ const Visualization = () => {
   const highRiskCount = todayAsteroids.filter(
     (a) => a.riskCategory === "high",
   ).length;
+  const toolbarClasses = "absolute top-4 right-4 flex gap-2 z-10";
+  const toolbarButtonClasses = "p-3 glass hover:bg-white/10 transition-colors";
 
   return (
     <div
-      className={`min-h-screen ${isFullscreen ? "pt-0" : "pt-20"} pb-0 relative`}
+      className={`min-h-screen ${
+        isFullscreen ? "pt-0"
+        : isCompact ? "pt-24"
+        : "pt-20"
+      } pb-0 relative`}
     >
       <div
-        className={`${isFullscreen ? "fixed inset-0 z-50" : "relative h-[calc(100vh-80px)]"}`}
+        className={`${
+          isFullscreen ? "fixed inset-0 z-50"
+          : isCompact ? "relative h-[calc(100vh-96px)]"
+          : "relative h-[calc(100vh-80px)]"
+        }`}
       >
         {/* 3D Canvas */}
         <Suspense
@@ -187,7 +205,7 @@ const Visualization = () => {
         </Suspense>
 
         {/* ─── Top-right toolbar ─────────────────────────── */}
-        <div className="absolute top-4 right-4 flex gap-2 z-10">
+        <div className={toolbarClasses}>
           {/* Back to Earth button - shows when asteroid is selected */}
           <AnimatePresence>
             {selectedAsteroid && (
@@ -202,14 +220,16 @@ const Visualization = () => {
                 title="Return to Earth view (Esc)"
               >
                 <Globe className="w-4 h-4 text-accent-primary" />
-                <span className="text-sm font-medium text-white">Back to Earth</span>
+                <span className="text-sm font-medium text-white">
+                  Back to Earth
+                </span>
               </motion.button>
             )}
           </AnimatePresence>
 
           <motion.button
             onClick={() => setShowInfo((prev) => !prev)}
-            className="p-3 glass hover:bg-white/10 transition-colors"
+            className={toolbarButtonClasses}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             title="Toggle info panel"
@@ -219,7 +239,7 @@ const Visualization = () => {
 
           <motion.button
             onClick={() => setShowAsteroidList((prev) => !prev)}
-            className="p-3 glass hover:bg-white/10 transition-colors"
+            className={toolbarButtonClasses}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             title="Asteroid list"
@@ -229,25 +249,54 @@ const Visualization = () => {
 
           <motion.button
             onClick={toggleFullscreen}
-            className="p-3 glass hover:bg-white/10 transition-colors"
+            className={toolbarButtonClasses}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             {isFullscreen ?
               <Minimize2 className="w-5 h-5 text-white" />
-              : <Maximize2 className="w-5 h-5 text-white" />}
+            : <Maximize2 className="w-5 h-5 text-white" />}
           </motion.button>
         </div>
 
-        {/* ─── Info Panel (left) ─────────────────────────── */}
+        {/* ─── Info Panel (left / modal on compact) ───────── */}
         <AnimatePresence>
+          {showInfo && !selectedAsteroid && isCompact && (
+            <motion.div
+              key="info-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-space-900/70 backdrop-blur-sm z-[15]"
+              onClick={() => setShowInfo(false)}
+            />
+          )}
           {showInfo && !selectedAsteroid && (
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="absolute top-4 left-4 glass p-5 max-w-xs z-10"
+              key="info-panel"
+              initial={
+                isCompact ? { opacity: 0, scale: 0.95 } : { opacity: 0, x: -20 }
+              }
+              animate={
+                isCompact ? { opacity: 1, scale: 1 } : { opacity: 1, x: 0 }
+              }
+              exit={
+                isCompact ? { opacity: 0, scale: 0.95 } : { opacity: 0, x: -20 }
+              }
+              className={`glass p-5 z-20 ${
+                isCompact ?
+                  "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-sm rounded-3xl shadow-2xl"
+                : "absolute top-4 left-4 max-w-xs"
+              }`}
             >
+              {isCompact && (
+                <button
+                  onClick={() => setShowInfo(false)}
+                  className="absolute top-3 right-3 p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
               <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
                 <SatelliteDish className="w-5 h-5 text-accent-primary" />
                 Orbital Viewer
@@ -297,20 +346,48 @@ const Visualization = () => {
           onNavigate={handleNavigateToDetail}
         />
 
-        {/* ─── Sun Clock (bottom-right, above time controls) ─ */}
-        <div className="absolute bottom-44 right-4 z-10">
-          <SunClock sunHour={sunHourAngle} onSunHourChange={setSunHourAngle} />
-        </div>
+        {/* ─── Sun Clock (desktop only) ─────────────────── */}
+        {!isCompact && (
+          <div className="absolute bottom-44 right-4 z-10">
+            <SunClock
+              sunHour={sunHourAngle}
+              onSunHourChange={setSunHourAngle}
+              size={130}
+            />
+          </div>
+        )}
 
         {/* ─── Asteroid List Sidebar ─────────────────────── */}
         <AnimatePresence>
+          {showAsteroidList && isCompact && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.7 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-space-900/90 backdrop-blur-sm z-10"
+              onClick={() => setShowAsteroidList(false)}
+            />
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
           {showAsteroidList && (
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="absolute top-16 left-4 glass p-4 w-72 max-h-[60vh] overflow-hidden flex flex-col z-10"
+              initial={
+                isCompact ? { opacity: 0, y: 40 } : { opacity: 0, x: -20 }
+              }
+              animate={isCompact ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
+              exit={isCompact ? { opacity: 0, y: 40 } : { opacity: 0, x: -20 }}
+              className={`glass p-4 overflow-hidden flex flex-col ${
+                isCompact ?
+                  "fixed inset-x-0 bottom-0 z-20 rounded-t-3xl max-h-[70vh]"
+                : "absolute top-16 left-4 w-72 max-h-[60vh] z-10"
+              }`}
             >
+              {isCompact && (
+                <div className="flex justify-center pb-2">
+                  <span className="h-1.5 w-12 rounded-full bg-white/15" />
+                </div>
+              )}
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-sm font-semibold text-white">
                   Tracked Objects ({todayAsteroids.length})
@@ -340,10 +417,11 @@ const Visualization = () => {
                       onClick={() => handleSelectAsteroid(asteroid)}
                       onMouseEnter={() => setHoveredAsteroid(asteroid)}
                       onMouseLeave={() => setHoveredAsteroid(null)}
-                      className={`w-full text-left px-3 py-2 rounded-xl flex items-center gap-2.5 transition-all text-sm ${isSelected ?
-                        "bg-accent-primary/15 border border-accent-primary/30"
+                      className={`w-full text-left px-3 py-2 rounded-xl flex items-center gap-2.5 transition-all text-sm ${
+                        isSelected ?
+                          "bg-accent-primary/15 border border-accent-primary/30"
                         : "hover:bg-white/5 border border-transparent"
-                        }`}
+                      }`}
                     >
                       <span
                         className={`w-2 h-2 rounded-full flex-shrink-0 ${riskColors[asteroid.riskCategory] || "bg-risk-minimal"}`}
@@ -366,38 +444,40 @@ const Visualization = () => {
 
         {/* ─── Bottom panel: stats + time controls ──────── */}
         <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
-          {/* Stats badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-wrap gap-2 px-4 pb-2 pointer-events-auto"
-          >
-            <div className="glass px-3 py-1.5 flex items-center gap-2">
-              <Radio className="w-4 h-4 text-accent-primary" />
-              <span className="text-white font-medium text-sm">
-                {todayAsteroids.length}
-              </span>
-              <span className="text-white/40 text-xs">Tracked</span>
-            </div>
-            {hazardousCount > 0 && (
+          {/* Stats badges — hidden on mobile for more canvas space */}
+          {!isMobile && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-wrap gap-2 px-4 pb-2 pointer-events-auto justify-start"
+            >
               <div className="glass px-3 py-1.5 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-risk-high" />
+                <Radio className="w-4 h-4 text-accent-primary" />
                 <span className="text-white font-medium text-sm">
-                  {hazardousCount}
+                  {todayAsteroids.length}
                 </span>
-                <span className="text-white/40 text-xs">Hazardous</span>
+                <span className="text-white/40 text-xs">Tracked</span>
               </div>
-            )}
-            {highRiskCount > 0 && (
-              <div className="glass px-3 py-1.5 flex items-center gap-2">
-                <AlertOctagon className="w-4 h-4 text-risk-high" />
-                <span className="text-white font-medium text-sm">
-                  {highRiskCount}
-                </span>
-                <span className="text-white/40 text-xs">High Risk</span>
-              </div>
-            )}
-          </motion.div>
+              {hazardousCount > 0 && (
+                <div className="glass px-3 py-1.5 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-risk-high" />
+                  <span className="text-white font-medium text-sm">
+                    {hazardousCount}
+                  </span>
+                  <span className="text-white/40 text-xs">Hazardous</span>
+                </div>
+              )}
+              {highRiskCount > 0 && (
+                <div className="glass px-3 py-1.5 flex items-center gap-2">
+                  <AlertOctagon className="w-4 h-4 text-risk-high" />
+                  <span className="text-white font-medium text-sm">
+                    {highRiskCount}
+                  </span>
+                  <span className="text-white/40 text-xs">High Risk</span>
+                </div>
+              )}
+            </motion.div>
+          )}
 
           {/* Time Controls */}
           <div className="pointer-events-auto">

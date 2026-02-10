@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import useChatStore from "../../stores/chatStore";
 import useAuthStore from "../../stores/authStore";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 const defaultRoomState = {
   messages: [],
@@ -53,6 +54,7 @@ const ChatSidebar = () => {
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Connect chat namespace based on auth
   useEffect(() => {
@@ -61,6 +63,23 @@ const ChatSidebar = () => {
       loadHistory(room);
     }
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (!isMobile) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobile, isOpen]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -151,16 +170,45 @@ const ChatSidebar = () => {
         }
       </motion.button>
 
+      <AnimatePresence>
+        {isOpen && isMobile && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.7 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-30 bg-black/70 backdrop-blur-sm"
+            onClick={toggleChat}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar panel */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ x: 400, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 400, opacity: 0 }}
+            initial={{
+              x: isMobile ? 0 : 400,
+              y: isMobile ? 200 : 0,
+              opacity: 0,
+            }}
+            animate={{ x: 0, y: 0, opacity: 1 }}
+            exit={{
+              x: isMobile ? 0 : 400,
+              y: isMobile ? 200 : 0,
+              opacity: 0,
+            }}
             transition={{ type: "spring", damping: 26, stiffness: 300 }}
-            className="fixed top-0 right-0 z-40 h-full w-[360px] max-w-[90vw] flex flex-col bg-space-900/95 backdrop-blur-xl border-l border-white/10 shadow-2xl"
+            className={`fixed z-40 flex flex-col bg-space-900/95 backdrop-blur-xl shadow-2xl ${
+              isMobile ?
+                "inset-x-0 bottom-0 top-auto h-[80vh] max-h-[720px] w-full rounded-t-3xl border-t border-white/10"
+              : "top-0 right-0 h-full w-[360px] max-w-[90vw] border-l border-white/10"
+            }`}
           >
+            {isMobile && (
+              <div className="flex justify-center pt-3 pb-1">
+                <span className="h-1.5 w-12 rounded-full bg-white/20" />
+              </div>
+            )}
             {/* Header */}
             <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between shrink-0">
               <div>
@@ -286,6 +334,14 @@ const ChatSidebar = () => {
             <form
               onSubmit={handleSend}
               className="px-4 py-3 border-t border-white/10 shrink-0"
+              style={
+                isMobile ?
+                  {
+                    paddingBottom:
+                      "calc(env(safe-area-inset-bottom, 0px) + 0.5rem)",
+                  }
+                : undefined
+              }
             >
               <div className="flex items-center gap-2">
                 <input

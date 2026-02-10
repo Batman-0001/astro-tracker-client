@@ -65,17 +65,17 @@ const Dashboard = () => {
           (prev.missDistanceLunar || Infinity)
         ) ?
           curr
-          : prev,
+        : prev,
       )
-      : null;
+    : null;
 
   return (
-    <div className="min-h-screen pt-20 pb-10">
+    <div className="min-h-screen pt-24 pb-12 sm:pb-16">
       {/* Hero Section with 3D Earth */}
-      <section className="relative px-6 py-8 overflow-hidden">
+      <section className="relative px-4 sm:px-6 py-8 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           {/* Background glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-primary/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-primary/10 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             {/* Text content */}
@@ -104,8 +104,8 @@ const Dashboard = () => {
               </p>
 
               {/* Quick stats */}
-              <div className="flex flex-wrap gap-4">
-                <div className="glass px-4 py-3 flex items-center gap-3">
+              <div className="flex flex-wrap gap-3">
+                <div className="glass px-4 py-3 flex items-center gap-3 w-full sm:w-auto">
                   <div className="w-10 h-10 rounded-lg bg-accent-primary/20 flex items-center justify-center">
                     <Crosshair className="w-5 h-5 text-accent-primary" />
                   </div>
@@ -116,7 +116,7 @@ const Dashboard = () => {
                     <p className="text-xs text-white/50">Closest (LD)</p>
                   </div>
                 </div>
-                <div className="glass px-4 py-3 flex items-center gap-3">
+                <div className="glass px-4 py-3 flex items-center gap-3 w-full sm:w-auto">
                   <div className="w-10 h-10 rounded-lg bg-accent-secondary/20 flex items-center justify-center">
                     <Globe className="w-5 h-5 text-accent-secondary" />
                   </div>
@@ -127,7 +127,7 @@ const Dashboard = () => {
                     <p className="text-xs text-white/50">Tracked Today</p>
                   </div>
                 </div>
-                <div className="glass px-4 py-3 flex items-center gap-3">
+                <div className="glass px-4 py-3 flex items-center gap-3 w-full sm:w-auto">
                   <div className="w-10 h-10 rounded-lg bg-risk-high/20 flex items-center justify-center">
                     <AlertTriangle className="w-5 h-5 text-risk-high" />
                   </div>
@@ -146,7 +146,7 @@ const Dashboard = () => {
 
             {/* 3D Earth */}
             <motion.div
-              className="relative h-[400px] lg:h-[500px]"
+              className="relative h-[280px] sm:h-[360px] lg:h-[500px]"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
@@ -170,7 +170,7 @@ const Dashboard = () => {
                     useFreeCamera={true}
                   />
                 </Suspense>
-                : <div className="w-full h-full glass rounded-2xl flex items-center justify-center">
+              : <div className="w-full h-full glass rounded-2xl flex items-center justify-center">
                   <button
                     onClick={() => setShow3D(true)}
                     className="btn-primary"
@@ -185,16 +185,16 @@ const Dashboard = () => {
       </section>
 
       {/* Ticker */}
-      <section className="px-6">
+      <section className="px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <Ticker items={todayAsteroids} />
         </div>
       </section>
 
       {/* Stats Grid */}
-      <section className="px-6 py-8">
+      <section className="px-4 sm:px-6 py-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             <StatCard
               icon={Crosshair}
               iconColor="text-accent-primary"
@@ -239,7 +239,7 @@ const Dashboard = () => {
                       0,
                     ) / todayAsteroids.length,
                   )
-                  : "—"
+                : "—"
               }
               subValue="Risk score"
               delay={0.3}
@@ -249,10 +249,10 @@ const Dashboard = () => {
       </section>
 
       {/* Asteroid Feed */}
-      <section className="px-6 py-8">
+      <section className="px-4 sm:px-6 py-8">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between items-start gap-4 mb-6">
             <div>
               <h2 className="text-2xl font-bold text-white">Asteroid Feed</h2>
               <p className="text-white/50">
@@ -260,29 +260,30 @@ const Dashboard = () => {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               {/* Search */}
-              <div className="relative">
+              <div className="relative w-full sm:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
                 <input
                   type="text"
                   placeholder="Search asteroids..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="input-field pl-10 w-full sm:w-64"
+                  className="input-field pl-10 w-full"
                 />
               </div>
 
               {/* Filter */}
-              <div className="flex items-center gap-1 bg-space-800 rounded-lg p-1 overflow-x-auto">
+              <div className="flex items-center gap-1 bg-space-800 rounded-lg p-1 overflow-x-auto w-full sm:w-auto -mx-1 px-1">
                 {["all", "hazardous", "high", "moderate", "low"].map((f) => (
                   <button
                     key={f}
                     onClick={() => setFilter(f)}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-all whitespace-nowrap ${filter === f ?
-                      "bg-accent-primary text-space-900"
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-all whitespace-nowrap ${
+                      filter === f ?
+                        "bg-accent-primary text-space-900"
                       : "text-white/60 hover:text-white"
-                      }`}
+                    }`}
                   >
                     {f.charAt(0).toUpperCase() + f.slice(1)}
                   </button>
@@ -295,7 +296,7 @@ const Dashboard = () => {
                   fetchTodayAsteroids();
                   fetchAsteroids();
                 }}
-                className="btn-secondary flex items-center gap-2"
+                className="btn-secondary flex items-center justify-center gap-2 w-full sm:w-auto"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 disabled={isLoading}
@@ -315,22 +316,22 @@ const Dashboard = () => {
                 <div key={i} className="glass h-64 animate-pulse" />
               ))}
             </div>
-            : filteredAsteroids.length > 0 ?
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredAsteroids.slice(0, 12).map((asteroid, index) => (
-                  <AsteroidCard
-                    key={asteroid.neo_reference_id || asteroid._id}
-                    asteroid={asteroid}
-                    index={index}
-                  />
-                ))}
-              </div>
-              : <div className="glass p-12 text-center">
-                <Globe className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                <p className="text-white/50">
-                  No asteroids found matching your criteria
-                </p>
-              </div>
+          : filteredAsteroids.length > 0 ?
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredAsteroids.slice(0, 12).map((asteroid, index) => (
+                <AsteroidCard
+                  key={asteroid.neo_reference_id || asteroid._id}
+                  asteroid={asteroid}
+                  index={index}
+                />
+              ))}
+            </div>
+          : <div className="glass p-12 text-center">
+              <Globe className="w-12 h-12 text-white/20 mx-auto mb-4" />
+              <p className="text-white/50">
+                No asteroids found matching your criteria
+              </p>
+            </div>
           }
 
           {/* View All Button */}
@@ -354,52 +355,52 @@ const Dashboard = () => {
       {todayAsteroids.filter(
         (a) => a.riskCategory === "high" || a.isPotentiallyHazardous,
       ).length > 0 && (
-          <section className="px-6 py-8">
-            <div className="max-w-7xl mx-auto">
-              <motion.div
-                className="glass border-risk-high/30 p-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <AlertTriangle className="w-6 h-6 text-risk-high" />
-                    <h3 className="text-xl font-bold text-risk-high">
-                      High Risk Objects
-                    </h3>
-                  </div>
-                  <Link
-                    to="/visualization"
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-primary/10 border border-accent-primary/20 text-accent-primary text-sm font-medium hover:bg-accent-primary/20 transition-all"
-                  >
-                    <Orbit className="w-4 h-4" />
-                    View All in 3D
-                  </Link>
+        <section className="px-4 sm:px-6 py-8">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              className="glass border-risk-high/30 p-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="flex flex-col gap-4 items-start md:flex-row md:items-center md:justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="w-6 h-6 text-risk-high" />
+                  <h3 className="text-xl font-bold text-risk-high">
+                    High Risk Objects
+                  </h3>
                 </div>
-                <p className="text-white/50 mb-4">
-                  These asteroids require close monitoring due to their size,
-                  velocity, or proximity.
-                </p>
-                <div className="grid gap-2">
-                  {todayAsteroids
-                    .filter(
-                      (a) =>
-                        a.riskCategory === "high" || a.isPotentiallyHazardous,
-                    )
-                    .slice(0, 5)
-                    .map((asteroid, index) => (
-                      <AsteroidCard
-                        key={asteroid.neo_reference_id}
-                        asteroid={asteroid}
-                        index={index}
-                        compact
-                      />
-                    ))}
-                </div>
-              </motion.div>
-            </div>
-          </section>
-        )}
+                <Link
+                  to="/visualization"
+                  className="flex w-full sm:w-auto items-center justify-center gap-2 px-4 py-2 rounded-xl bg-accent-primary/10 border border-accent-primary/20 text-accent-primary text-sm font-medium hover:bg-accent-primary/20 transition-all"
+                >
+                  <Orbit className="w-4 h-4" />
+                  View All in 3D
+                </Link>
+              </div>
+              <p className="text-white/50 mb-4">
+                These asteroids require close monitoring due to their size,
+                velocity, or proximity.
+              </p>
+              <div className="grid gap-2">
+                {todayAsteroids
+                  .filter(
+                    (a) =>
+                      a.riskCategory === "high" || a.isPotentiallyHazardous,
+                  )
+                  .slice(0, 5)
+                  .map((asteroid, index) => (
+                    <AsteroidCard
+                      key={asteroid.neo_reference_id}
+                      asteroid={asteroid}
+                      index={index}
+                      compact
+                    />
+                  ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
     </div>
   );
 };

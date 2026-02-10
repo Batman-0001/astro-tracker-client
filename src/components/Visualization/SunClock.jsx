@@ -7,7 +7,7 @@ import { Sun, Moon, Clock, RotateCcw } from "lucide-react";
  * Displays an analog clock face with a draggable sun indicator.
  * Returns sunHourAngle (0–24 UTC) to parent.
  */
-const SunClock = ({ sunHour, onSunHourChange, className = "" }) => {
+const SunClock = ({ sunHour, onSunHourChange, className = "", size = 140 }) => {
   const clockRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isLive, setIsLive] = useState(true);
@@ -168,7 +168,7 @@ const SunClock = ({ sunHour, onSunHourChange, className = "" }) => {
       </div>
 
       {/* Clock face */}
-      <div className="relative mx-auto" style={{ width: 140, height: 140 }}>
+      <div className="relative mx-auto" style={{ width: size, height: size }}>
         <svg
           ref={clockRef}
           viewBox="0 0 100 100"

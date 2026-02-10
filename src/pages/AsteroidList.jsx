@@ -120,7 +120,7 @@ const AsteroidList = () => {
     filters.riskCategory || filters.hazardousOnly || searchQuery;
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-6">
+    <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -142,9 +142,9 @@ const AsteroidList = () => {
           transition={{ delay: 0.1 }}
           className="glass p-4 mb-6"
         >
-          <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex flex-wrap gap-4 items-stretch">
             {/* Search */}
-            <div className="relative flex-1 min-w-[250px]">
+            <div className="relative flex-1 min-w-0 w-full sm:min-w-[240px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
               <input
                 type="text"
@@ -158,7 +158,7 @@ const AsteroidList = () => {
             {/* Filter toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`btn-secondary flex items-center gap-2 ${showFilters ? "border-accent-primary" : ""}`}
+              className={`btn-secondary flex items-center justify-center gap-2 w-full sm:w-auto ${showFilters ? "border-accent-primary" : ""}`}
             >
               <Filter className="w-4 h-4" />
               Filters
@@ -176,7 +176,7 @@ const AsteroidList = () => {
                 loadPage(1);
               }}
               disabled={isLoading}
-              className="btn-ghost p-2.5"
+              className="btn-ghost p-2.5 w-full sm:w-auto flex justify-center"
             >
               <RefreshCw
                 className={`w-5 h-5 ${isLoading ? "animate-spin" : ""}`}
@@ -287,7 +287,7 @@ const AsteroidList = () => {
           </AnimatePresence>
         </motion.div>
 
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
           <p className="text-white/50">
             Showing {filteredAsteroids.length} of {totalCount.toLocaleString()}{" "}
             asteroids

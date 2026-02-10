@@ -287,7 +287,7 @@ const ImpactVisualizer = () => {
 
   return (
     <motion.div
-      className={`${isFullscreen ? "fixed inset-0 z-50" : "pt-20 pb-8 px-4 min-h-screen"} bg-space-900`}
+      className={`${isFullscreen ? "fixed inset-0 z-50" : "pt-20 pb-8 px-3 sm:px-4 min-h-screen"} bg-space-900`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -299,7 +299,7 @@ const ImpactVisualizer = () => {
         {!isFullscreen && (
           <div className="mb-4">
             <motion.h1
-              className="text-3xl font-bold text-white flex items-center gap-3"
+              className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3"
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
             >
@@ -307,7 +307,7 @@ const ImpactVisualizer = () => {
                 <Target className="w-5 h-5 text-white" />
               </div>
               Impact Simulator
-              <span className="text-sm font-normal text-white/40 ml-2">
+              <span className="text-sm font-normal text-white/40 ml-2 hidden sm:inline">
                 — just for fun 🎮
               </span>
             </motion.h1>
@@ -570,7 +570,7 @@ const ImpactVisualizer = () => {
 
           {/* ─── 3D Viewport ─────────────────────────────────────── */}
           <div
-            className={`flex-1 relative ${isFullscreen ? "h-full" : "min-h-[500px] lg:min-h-0"}`}
+            className={`flex-1 relative ${isFullscreen ? "h-full" : "min-h-[350px] sm:min-h-[500px] lg:min-h-0"}`}
           >
             <div className="absolute inset-0 rounded-2xl overflow-hidden border border-white/5">
               <ImpactSimulator
@@ -635,8 +635,10 @@ const ImpactVisualizer = () => {
               {showStats && impactResults && (
                 <motion.div
                   className={`absolute ${
-                    isFullscreen ? "top-4 right-16" : "top-3 right-14"
-                  } z-10 w-72`}
+                    isFullscreen ?
+                      "top-4 right-16 w-72"
+                    : "top-3 right-14 w-60 sm:w-72"
+                  } z-10`}
                   initial={{ opacity: 0, y: -10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.95 }}

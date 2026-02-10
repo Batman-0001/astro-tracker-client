@@ -65,12 +65,12 @@ const Profile = () => {
   // Not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen pt-24 pb-12 px-6">
+      <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass p-12"
+            className="glass p-8 sm:p-12"
           >
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-accent-primary/20 to-accent-secondary/20 flex items-center justify-center">
               <User className="w-10 h-10 text-accent-primary" />
@@ -94,7 +94,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-6">
+    <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <motion.div
@@ -102,7 +102,9 @@ const Profile = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-4xl font-bold text-white mb-2">Your Profile</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2">
+            Your Profile
+          </h1>
           <p className="text-white/50">Manage your account and preferences</p>
         </motion.div>
 
